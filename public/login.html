@@ -1,0 +1,66 @@
+<html>
+
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background-color: #f2f2f2;
+        }
+
+        .card {
+            width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+        .btn-google {
+            background-color: #4285f4;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1>Login</h1>
+                <form method="post" onsubmit="login()">
+
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" class="form-control" id="email" name="email"
+                            placeholder="Digite seu e-mail">
+                    </div>
+                    <div class="form-group">
+                        <label for="senha">Senha</label>
+                        <input type="password" class="form-control" id="senha" name="senha"
+                            placeholder="Digite sua senha">
+                    </div>
+                    
+                    <input type="submit" class="btn btn-primary" value="Entrar"> 
+                        <a class="btn btn-default">Já tem uma conta? Entre aqui</a> <a
+                        href="#" onclick="login()" class="btn btn-google">
+                            Entrar usando conta Google
+                        </a>
+                    </input>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    
+        <script src="public/accountController.js"></script>
+</body>
