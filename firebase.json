@@ -11,8 +11,15 @@
     ],
     "rewrites": [
       {
+        "source": "/room",
+        "destination": "/room.html"
+      },
+      {
         "source": "**",
-        "destination": "/index.html"
+        "destination": "/login.html"
+      } ,{
+        "source": "/agendamentos",
+        "destination": "/agendamentos/agendamentos.html"
       }
     ]
   }
