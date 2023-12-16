@@ -67,7 +67,7 @@ async function createRoom() {
   roomId = roomRef.id;
   console.log(`New room created with SDP offer. Room ID: ${roomRef.id}`);
   document.querySelector(
-      '#currentRoom').innerText = `Current room is ${roomRef.id} - You are the caller!`;
+      '#currentRoom').innerText = `Current room is ${roomRef.id} - O id da sala criada`;
 
   peerConnection.addEventListener('track', event => {
     console.log('Got remote track:', event.streams[0]);

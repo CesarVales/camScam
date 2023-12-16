@@ -1,68 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minha Agenda</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Agenda</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous">
+        <script type="module" defer src="/__/firebase/10.0.0/firebase-firestore.js"></script>
+
+    <style>
+        body {
+            background-color: #f5f5f5;
+            /* Cor de fundo */
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        h1,
+        h3 {
+            color: #673ab7;
+            /* Cor roxa */
+        }
+        h2 {
+            color: #e6e0f1;
+            /* Cor roxa */
+        }
+
+        .h2Eventos{
+          color: #673ab7;
+
+        }
+
+        .btn-primary {
+            background-color: #673ab7;
+            /* Cor de fundo do botão principal */
+            border-color: #673ab7;
+            /* Cor da borda do botão principal */
+        }
+
+        .btn-primary:hover {
+            background-color: #5e35b1;
+            /* Cor de fundo do botão principal ao passar o mouse */
+            border-color: #5e35b1;
+            /* Cor da borda do botão principal ao passar o mouse */
+        }
+
+        .btn-danger {
+            background-color: #d32f2f;
+            /* Cor de fundo do botão de cancelar */
+            border-color: #d32f2f;
+            /* Cor da borda do botão de cancelar */
+        }
+
+        .btn-danger:hover {
+            background-color: #c62828;
+            /* Cor de fundo do botão de cancelar ao passar o mouse */
+            border-color: #c62828;
+            /* Cor da borda do botão de cancelar ao passar o mouse */
+        }
+
+        .btn-success {
+            background-color: #5e35b1;
+            /* Cor de fundo do botão de novo evento */
+            border-color: #5e35b1;
+            /* Cor da borda do botão de novo evento */
+        }
+
+        .btn-success:hover {
+            background-color: #7d55cc;
+            /* Cor de fundo do botão de novo evento ao passar o mouse */
+            border-color: #7d55cc;
+            /* Cor da borda do botão de novo evento ao passar o mouse */
+        }
+
+        .table {
+            background-color: #fff;
+            /* Cor de fundo da tabela */
+        }
+
+        th,
+        td {
+            border-color: #ddd;
+            /* Cor da borda das células da tabela */
+        }
+        
+        .card {
+            border-radius: 15px;
+            /* Borda arredondada */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* Sombra leve */
+            margin-bottom: 20px;
+            /* Espaçamento inferior */
+        }
+
+        .card-header {
+            background-color: #673ab7;
+            /* Cor de fundo do cabeçalho do card */
+            color: #fff;
+            /* Cor do texto do cabeçalho do card */
+            border-bottom: none;
+            /* Sem borda inferior no cabeçalho do card */
+        }
+    </style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <h1>Minha Agenda</h1>
-      </div>
-    </div>
-    <div  id="novoEvento" class="row my-2 mx-1 py-2 border rounded d-none">
-      <div class="col-12">
-        <form action="">
-          <div class="row">
-            <div class="col-12">
-              <h2>Novo Evento</h2>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>Minha Agenda</h1>
             </div>
-          </div>
-          <div class="row g-3">
+        </div>
+        <div id="novoEvento" class="row my-2 mx-1 py-2 d-none">
             <div class="col-12">
-              <label for="nomeEvento" class="form-label">Nome do Evento</label>
-              <input type="text" name="nomeEvento" id="nomeEvento"  class="form-control">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Novo Evento</h2>
+                    </div>
+                    <div class="card-body">
+                        <form  id="formNovoEvento">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label for="nomeEvento" class="form-label">Nome do Evento</label>
+                                    <input type="text" name="nomeEvento" id="nomeEvento" class="form-control">
+                                </div>
+                                <div class="col-12">
+                                    <label for="dataEvento" class="form-label">Data do Evento</label>
+                                    <input type="datetime-local" name="dataEvento" id="dataEvento"
+                                        class="form-control">
+                                </div>
+                                <div class="col-12">
+                                    <label for="dataEvento" class="form-label">Local</label>
+                                    <input type="addr" name="dataEvento" id="dataEvento"
+                                        class="form-control">
+                                </div>
+                                <div class="col-6"><button type="button" id="buttonCancelar" onclick="cancelEvent()"
+                                        class="btn btn-danger w-100">Cancelar</button></div>
+                                <div class="col-6"><button type="submit" class="btn btn-primary w-100">Salvar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h2 class="h2Eventos">
+                    Eventos
+                </h2>
+            </div>
+            <div class="col-auto">
+                <button type="button" id="buttonNovoEvento" class="btn btn-success" onclick="newEvent()"> Novo Evento</button>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-12">
-              <label for="dataEvento" class="form-label">Data do Evento</label>
-              <input type="datetime-local" name="dataEvento" id="dataEvento" class="form-control">
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Data</th>
+                        <th scope="col">Evento</th>
+                        <th scope="col">Ações</th>
+                        <th scope="col">Endereco</th>
+
+                        <th scope="col">Mapa</th>
+
+                      </tr>
+                      </thead>
+                    <tbody id="tabelaEventos">
+                        
+                    </tbody>
+                </table>
             </div>
-            <div class="col-6"><button type="button" class="btn btn-danger w-100">Cancelar</button></div>
-            <div class="col-6"><button type="submit" class="btn btn-primary w-100" >Salvar</button></div>
-          </div>
-        </form>
-      </div>
+        </div>
     </div>
-    <div class="row">
-      <div class="col">
-        <h2>
-          Eventos
-        </h2>
-      </div>
-      <div class="col-auto">
-        <button type="button" class="btn btn-success" href="public/agendamentos/agendamentos.js"  onclick="newEvent()"> Novo Evento</button>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <table class="table">
-          <thead>
-            <th scope="col">Data</th>
-            <th scope="col">Evento</th>
-            <th scope="col">Ações</th>
-          </thead>
-          <tbody>
-            <td colspan="3">Nenhum evento</td>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  <script src="agendamentos.js" ></script>
+    
+
+    </arcgis-map>
+    <script type="module">
+     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getFirestore, collection, addDoc ,query,where, getDocs,deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    
+    const firebaseConfig = {
+       apiKey: "AIzaSyBi45MAcEE383dz_1rjTDgYprVIDrCtKF8",
+       authDomain: "webrtc-2f317.firebaseapp.com",
+       projectId: "webrtc-2f317",
+       storageBucket: "webrtc-2f317.appspot.com",
+       messagingSenderId: "722504795947",
+       appId: "1:722504795947:web:ddcb16a9c466bb7757e76e",
+       measurementId: "G-QWZZZBN0JF"
+   }
+   
+     // Inicializa o Firebase
+     const app = initializeApp(firebaseConfig);
+        const database = getDatabase();
+        const db = getFirestore(app); // Modificado para getFirestore
+
+
+        
+     
+
+
+       var novoEvento =  document.getElementById('novoEvento')
+        var buttonNovoEvento =  document.getElementById('buttonNovoEvento')
+        var buttonCancelar =  document.getElementById('buttonCancelar')
+        var tabelaEventos = document.getElementById('tabelaEventos')
+
+        var listaEventos = []
+
+                  
+        
+        async function updateEventTable() {
+        // Limpar a tabela antes de adicionar novas linhas
+        tabelaEventos.innerHTML = '';
+
+        // Carrega eventos do Firestore
+        const eventosCollection = collection(db, 'eventos');
+        const q = query(eventosCollection, where('user', '==', localStorage.getItem('user')));
+        const eventosSnapshot = await getDocs(q);
+        listaEventos = eventosSnapshot.docs.map(doc => doc.data());
+
+        // Adiciona as linhas à tabela
+        if (listaEventos.length === 0) {
+            tabelaEventos.innerHTML = '<td colspan="3">Nenhum evento</td>';
+        } else {
+            for (var i = 0; i < listaEventos.length; i++) {
+            var evento = listaEventos[i];
+            var linha = document.createElement('tr');
+            linha.innerHTML = `<td>${new Date(evento.data).toLocaleDateString()}</td><td>${evento.nome}</td><td><button type="button" onclick="deleteEvent(${i})" class="btn btn-danger">Excluir</button></td>`;
+            
+            linha.innerHTML += `<td><button type="button" onclick="window.location.href='../mapa.html'" class="btn btn-danger">Ver Local</button></td>`;
+            linha.innerHTML += `<td>casa da mae do jão</td>`;
+
+            linha.innerHTML += `<td><button type="button" onclick="window.location.href='../room.html'" class="btn btn-danger">Reunir</button></td>`;
+
+            tabelaEventos.appendChild(linha);
+            }
+        }
+        }
+
+        async function deleteEvent(index) {
+        try {
+            console.log(listaEventos[index])
+
+            // Obtenha o ID do documento a partir da lista de eventos
+            const eventoParaExcluir = listaEventos[index];
+            const eventosCollection = collection(db, 'eventos');
+            const q = query(eventosCollection, where('user', '==', localStorage.getItem('user')));
+            const eventosSnapshot = await getDocs(q);
+
+            eventosSnapshot.docs.forEach(async doc => {
+                const evento = doc.data();
+                if (
+                    evento.nome === eventoParaExcluir.nome 
+                ) {
+                    // Exclua o documento do Firestore
+                    console.log('doc.ref '+ doc.ref)
+                    await deleteDoc(doc.ref);
+                }
+            });
+
+            // Remova o evento da lista de eventos
+            listaEventos = listaEventos.splice(index, 1);
+            // Atualize a tabela de eventos
+            updateEventTable();
+        } catch (error) {
+            console.error("Erro ao excluir evento:", error);
+        }
+    }
+    window.deleteEvent =deleteEvent
+        var newEvent =  () => {
+          novoEvento.classList.remove("d-none")
+        }
+        window.newEvent = newEvent
+
+        var cancelEvent = () => {
+          novoEvento.classList.add("d-none")
+        }
+       async  function saveNewEvent(event){
+           event.preventDefault()
+             const user = getAuth().currentUser;
+
+          var evento = {
+            nome: document.getElementById('nomeEvento').value,
+            data: document.getElementById('dataEvento').value,
+            user: localStorage.getItem('user')
+          }
+           listaEventos.push(evento)
+           const eventosCollection = collection(db, 'eventos');
+            await addDoc(eventosCollection, evento);
+           updateEventTable()
+        }
+        window.cancelEvent = cancelEvent
+        buttonNovoEvento.addEventListener('click',newEvent)
+        buttonCancelar.addEventListener('click',cancelEvent)
+        formNovoEvento.addEventListener('submit',saveNewEvent)
+        //carrega linha vazia na tabela
+        window.addEventListener('load',updateEventTable)
+    </script>
 
 </body>
+
 </html>

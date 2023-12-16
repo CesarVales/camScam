@@ -20,6 +20,14 @@
       } ,{
         "source": "/agendamentos",
         "destination": "public/agendamentos/agendamentos.html"
+      },
+      {
+        "source": "/mapa",
+        "destination": "/mapa.html"
+      },
+      {
+        "source": "/room",
+        "destination": "/room.html"
       }
     ]
   }
