@@ -19,7 +19,7 @@
         "destination": "/login.html"
       } ,{
         "source": "/agendamentos",
-        "destination": "/agendamentos/agendamentos.html"
+        "destination": "public/agendamentos/agendamentos.html"
       }
     ]
   }
