@@ -26,8 +26,8 @@
         "destination": "/mapa.html"
       },
       {
-        "source": "/room",
-        "destination": "/room.html"
+        "source": "/convites",
+        "destination": "/convites.html"
       }
     ]
   }

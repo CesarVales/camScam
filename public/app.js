@@ -19,6 +19,8 @@ let roomDialog = null;
 let roomId = null;
 
 function init() {
+  var eventoClicado = localStorage.getItem('eventoClicado')
+
   document.querySelector('#cameraBtn').addEventListener('click', openUserMedia);
   document.querySelector('#hangupBtn').addEventListener('click', hangUp);
   document.querySelector('#createBtn').addEventListener('click', createRoom);

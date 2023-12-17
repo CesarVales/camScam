@@ -5,12 +5,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minha Agenda</title>
+    <title>Pedidos Pendentes</title>
     <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
     <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script type="module" defer src="/__/firebase/10.0.0/firebase-firestore.js"></script>
@@ -23,7 +21,6 @@
 
         .container {
             margin-top: 20px;
-            
         }
 
         h1,
@@ -39,7 +36,6 @@
 
         .h2Eventos {
             color: #673ab7;
-
         }
 
         .btn-primary {
@@ -87,8 +83,10 @@
         .table {
             background-color: #fff;
             /* Cor de fundo da tabela */
-            margin-bottom: 20px; /* Adicione margem na parte inferior da tabela */
-            min-height: 200px; /* Adicione uma altura mínima à tabela */
+            margin-bottom: 20px;
+            /* Adicione margem na parte inferior da tabela */
+            min-height: 200px;
+            /* Adicione uma altura mínima à tabela */
         }
 
         th,
@@ -121,86 +119,32 @@
     <div class="container mx-auto mt-4 ms-n4">
         <div class="row">
             <div class="col">
-                <h1>Minha Agenda</h1>
-            </div>
-        </div>
-        <div id="novoEvento" class="row my-4 mx-1 py-4 d-none">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Novo Evento</h2>
-                    </div>
-                    <div class="card-body">
-                        <form id="formNovoEvento">
-                            <div class="row g-3">
-                                <div class="col-12">
-                                    <label for="nomeEvento" class="form-label">Nome do Evento</label>
-                                    <input type="text" name="nomeEvento" id="nomeEvento" class="form-control">
-                                </div>
-                                <div class="col-12">
-                                    <label for="dataEvento" class="form-label">Data do Evento</label>
-                                    <input type="datetime-local" name="dataEvento" id="dataEvento" class="form-control">
-                                </div>
-                                <div class="col-12">
-                                    <input type="addr" name="coordenadas" id="coordenadas" style="display: none;"
-                                        class="form-control">
-                                </div>
-                                <div class="col-12">
-                                    <label for="convidado" class="form-label">Convidado</label>
-                                    <input type="text" class="form-control" id="convidado" name="convidado"
-                                        placeholder="Digite o e-mail do convidado">
-                                </div>
-                                <div>
-                                    <input type="text" class="form-control" id='localEvento'
-                                        onfocus="initAutocomplete()" placeholder='digite o local' />
-                                </div>
-                                <div class="col-6"><button type="button" id="buttonCancelar" onclick="cancelEvent()"
-                                        class="btn btn-danger w-100">Cancelar</button></div>
-                                <div class="col-6"><button type="submit" class="btn btn-primary w-100">Salvar</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <h2 class="h2Eventos">
-                    Eventos
-                </h2>
-            </div>
-            <div class="col-auto">
-                <button type="button" id="buttonNovoEvento" class="btn btn-success" onclick="newEvent()"> Novo Evento</button>
-            
-                <button type="button" id="buttonConvites" class="btn btn-success" onclick="window.location.href='../convites.html'">Convites</button>
+                <h1>Pedidos Pendentes</h1>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
-                <table class="table table-light table-striped table-hover" id="eventosTable">
+                <table class="table table-light table-striped table-hover" id="pendingRequestsTable">
                     <thead>
                         <tr>
                             <th scope="col">Data</th>
                             <th scope="col">Evento</th>
                             <th scope="col">Local</th>
                             <th scope="col">Ações</th>
-                            
                         </tr>
                     </thead>
-                    <tbody id="tabelaEventos">
+                    <tbody id="tabelaPedidosPendentes">
                         <!-- Linhas da tabela serão adicionadas dinamicamente aqui -->
                     </tbody>
+                </table>
             </div>
         </div>
-        
     </div>
-   
-</body>
-<script async
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCL3SgYRekMfsu26VPGsvMdzzphX4J-2UI&libraries=places"></script>
 
-<script type="module">
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCL3SgYRekMfsu26VPGsvMdzzphX4J-2UI&libraries=places"></script>
+
+    <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -230,7 +174,7 @@
     var novoEvento = document.getElementById('novoEvento')
     var buttonNovoEvento = document.getElementById('buttonNovoEvento')
     var buttonCancelar = document.getElementById('buttonCancelar')
-    var tabelaEventos = document.getElementById('tabelaEventos')
+    var tabelaEventos = document.getElementById('pendingRequestsTable');
 
     var listaEventos = []
 
@@ -242,8 +186,8 @@
 
         // Carrega eventos do Firestore
         const eventosCollection = collection(db, 'eventos');
-        const q = query(eventosCollection, where('user', '==', localStorage.getItem('user')));
-        
+        const q = query(eventosCollection, where('convidado', '==', localStorage.getItem('user')));
+        console.log(localStorage.getItem('user'))
         const eventosSnapshot = await getDocs(q);
         listaEventos = eventosSnapshot.docs.map(doc => doc.data());
 
@@ -274,14 +218,14 @@
             }
         }
     }
-    document.getElementById('eventosTable').addEventListener('click', function (event) {
+    document.getElementById('pendingRequestsTable').addEventListener('click', function (event) {
         const target = event.target;
 
         // Encontre o elemento pai (a linha da tabela) que contém o botão clicado
         const rowIndex = target.closest('tr').rowIndex;
 
         // Obtenha os valores associados à linha clicada
-        const eventoClicado = listaEventos[rowIndex - 1]; // A tabela inclui uma linha de cabeçalho
+        const eventoClicado = listaEventos[rowIndex ]; // A tabela inclui uma linha de cabeçalho
 
         // Agora você pode usar os valores de 'eventoClicado' conforme necessário
         console.log('Nome do evento clicado:', eventoClicado.nome);
@@ -317,107 +261,11 @@
         window.location.href = "../mapa.html"
 
     } window.loadMap = loadMap
-    async function deleteEvent(index) {
-        try {
-            console.log(listaEventos[index-1])
-
-            // Obtenha o ID do documento a partir da lista de eventos
-            const eventoParaExcluir = listaEventos[index-1];
-            const eventosCollection = collection(db, 'eventos');
-            const q = query(eventosCollection, where('user', '==', localStorage.getItem('user')));
-            const eventosSnapshot = await getDocs(q);
-
-            eventosSnapshot.docs.forEach(async doc => {
-                const evento = doc.data();
-                if (
-                    evento.id === eventoParaExcluir.id
-                ) {
-                    // Exclua o documento do Firestore
-                    console.log('doc.ref ' + doc.ref)
-                    await deleteDoc(doc.ref);
-                }
-            });
-
-            // Remova o evento da lista de eventos
-            listaEventos = listaEventos.splice(index-1, 1);
-            // Atualize a tabela de eventos
-            updateEventTable();
-        } catch (error) {
-            console.error("Erro ao excluir evento:", error);
-        }
-    }
-    window.deleteEvent = deleteEvent
-    var newEvent = () => {
-        novoEvento.classList.remove("d-none")
-    }
-    window.newEvent = newEvent
-
-    var cancelEvent = () => {
-        novoEvento.classList.add("d-none")
-    }
-    async function saveNewEvent(event) {
-        event.preventDefault()
-        const user = getAuth().currentUser;
-
-        var evento = {
-            nome: document.getElementById('nomeEvento').value,
-            data: document.getElementById('dataEvento').value,
-            local: document.getElementById('localEvento').value,
-            coordenadas: document.getElementById('coordenadas').value,
-            user: localStorage.getItem('user'),
-            convidado: document.getElementById('convidado').value, // Valor do input
-            criador: true
-        }
-        
-        const eventosCollection = collection(db, 'eventos');
-        const docRef = await addDoc(eventosCollection, evento);
-        
-        // Adicionando o ID do documento ao objeto de evento
-        evento.id = docRef.id;
-        
-        // Atualizando o documento com o ID
-        await setDoc(docRef, evento);
-        listaEventos.push(evento)
-        updateEventTable()
-    }
-    window.cancelEvent = cancelEvent
-    buttonNovoEvento.addEventListener('click', newEvent)
-    buttonCancelar.addEventListener('click', cancelEvent)
-    formNovoEvento.addEventListener('submit', saveNewEvent)
-    //carrega linha vazia na tabela
-    window.addEventListener('load', updateEventTable)
-    let autoComplete;
-
-    function initAutocomplete() {
-        autoComplete = new google.maps.places.Autocomplete(
-            document.getElementById('localEvento'), {
-            componentRestrictions: { country: "br" },
-            fields: ["address_components", "geometry", "icon", "name"],
-            strictBounds: false,
-        }
-        );
-        autoComplete.addListener('place_changed', onPlaceChanged);
-    }
-
-    window.initAutocomplete = initAutocomplete;
-
-    function onPlaceChanged() {
-        var place = autoComplete.getPlace();
-        if (!place.geometry) {
-            document.getElementById('autocomplete').placeholder = 'Digite um lugar';
-        } else {
-            //document.getElementById('details').innerHTML = place.name;
-            var latitude = place.geometry.location.lat();
-            var longitude = place.geometry.location.lng();
-            localStorage.setItem('coordenadas', { lat: latitude, long: longitude })
-            document.getElementById('coordenadas').value = JSON.stringify({ lat: latitude, long: longitude })
-        }
-    }
-    window.onPlaceChanged = onPlaceChanged
-
-
-
+   
+    
+    updateEventTable()
 </script>
 
-  
+</body>
+
 </html>
