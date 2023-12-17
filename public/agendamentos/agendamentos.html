@@ -6,6 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minha Agenda</title>
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
         crossorigin="anonymous">
@@ -135,8 +140,8 @@
                                         class="form-control">
                                 </div>
                                 <div class="col-12">
-                                    <label for="dataEvento" class="form-label">Local</label>
-                                    <input type="addr" name="dataEvento" id="dataEvento"
+                                    <label for="localEvento" class="form-label">Local</label>
+                                    <input type="addr" name="localEvento" id="localEvento"
                                         class="form-control">
                                 </div>
                                 <div class="col-6"><button type="button" id="buttonCancelar" onclick="cancelEvent()"
@@ -166,10 +171,8 @@
                       <tr>
                         <th scope="col">Data</th>
                         <th scope="col">Evento</th>
+                        <th scope="col">Local</th>
                         <th scope="col">Ações</th>
-                        <th scope="col">Endereco</th>
-
-                        <th scope="col">Mapa</th>
 
                       </tr>
                       </thead>
@@ -181,9 +184,9 @@
         </div>
     </div>
     
-
-    </arcgis-map>
-    <script type="module">
+</body>
+<script src="https://maps.googleapis.com/maps/api/js?key=SUA_CHAVE_API&libraries=places"></script>
+<script type="module">
      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -236,18 +239,35 @@
             for (var i = 0; i < listaEventos.length; i++) {
             var evento = listaEventos[i];
             var linha = document.createElement('tr');
-            linha.innerHTML = `<td>${new Date(evento.data).toLocaleDateString()}</td><td>${evento.nome}</td><td><button type="button" onclick="deleteEvent(${i})" class="btn btn-danger">Excluir</button></td>`;
-            
-            linha.innerHTML += `<td><button type="button" onclick="window.location.href='../mapa.html'" class="btn btn-danger">Ver Local</button></td>`;
-            linha.innerHTML += `<td>casa da mae do jão</td>`;
+            linha.innerHTML = `<td>${new Date(evento.data).toLocaleDateString()}</td><td>${evento.nome}</td>`;
+            console.log(evento.local)
 
-            linha.innerHTML += `<td><button type="button" onclick="window.location.href='../room.html'" class="btn btn-danger">Reunir</button></td>`;
+            linha.innerHTML += `<td>${evento.local}</td>`;
+
+            linha.innerHTML += `<td>
+                          <button type="button" onclick="loadMap('${evento.local}')" class="btn btn-danger">
+                            <i class="material-icons">place</i> Ver Local
+                          </button>
+                          &nbsp; 
+                          <button type="button" onclick="deleteEvent(${i})" class="btn btn-danger">
+                            <i class="material-icons">delete</i> Excluir
+                          </button>
+                          &nbsp; 
+                          <button type="button" onclick="window.location.href='../room.html'" class="btn btn-danger">
+                            <i class="material-icons">group</i> Reunir
+                          </button>
+                      </td>`;
 
             tabelaEventos.appendChild(linha);
             }
         }
         }
-
+        function loadMap(end){
+            console.log(end)
+            localStorage.setItem('local',end)
+            window.location.href = "../mapa.html"
+            
+        } window.loadMap = loadMap
         async function deleteEvent(index) {
         try {
             console.log(listaEventos[index])
@@ -293,6 +313,8 @@
           var evento = {
             nome: document.getElementById('nomeEvento').value,
             data: document.getElementById('dataEvento').value,
+            local: document.getElementById('localEvento').value,
+
             user: localStorage.getItem('user')
           }
            listaEventos.push(evento)
@@ -308,6 +330,5 @@
         window.addEventListener('load',updateEventTable)
     </script>
 
-</body>
 
 </html>

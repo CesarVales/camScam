@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -7,12 +7,119 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+    <!-- Estilos personalizados -->
+    <style>
+        body {
+            background: linear-gradient(to bottom, #673ab7, #512da8);
+            color: #fff;
+            font-family: 'Open Sans', sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: #fff;
+            text-align: center;
+        }
+
+        form {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            color: #673ab7;
+        }
+
+        .btn-primary {
+            background-color: #673ab7;
+            border-color: #673ab7;
+            width: 100%;
+            margin-bottom: 10px; /* Adicionado para espaçamento inferior */
+            position: relative; /* Adicionado para posicionar o ícone de forma relativa */
+
+        }
+        .btn-primary .material-icons{
+            position: absolute; /* Posiciona o ícone de forma absoluta dentro do botão */
+            left: 10px; /* Ajusta a posição do ícone em relação à borda esquerda do botão */
+            top: 50%; /* Alinha o ícone verticalmente ao centro do botão */
+            transform: translateY(-50%); /* Corrige a posição vertical do ícone */
+
+        }
+        .btn-primary:hover {
+            background-color: #5e35b1;
+            border-color: #5e35b1;
+        }
+
+        .btn-link {
+            color: #673ab7;
+            width: 100%;
+            text-align: center;
+            display: block;
+            margin-bottom: 10px; /* Adicionado para espaçamento inferior */
+        }
+
+        .btn-link:hover {
+            text-decoration: underline;
+        }
+            .btn-google {
+                background-color: #4285f4;
+                border-color: #4285f4;
+                color: #fff;
+                width: 100%;
+                padding: 10px;
+                position: relative; /* Adicionado para posicionar o ícone de forma relativa */
+            }
+
+    .btn-google:hover {
+        background-color: #3367d6;
+        border-color: #3367d6;
+    }
+
+    .btn-google .material-icons {
+        position: absolute; /* Posiciona o ícone de forma absoluta dentro do botão */
+        left: 10px; /* Ajusta a posição do ícone em relação à borda esquerda do botão */
+        top: 50%; /* Alinha o ícone verticalmente ao centro do botão */
+        transform: translateY(-50%); /* Corrige a posição vertical do ícone */
+    }
+
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        video {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+    <!-- Fonte Open Sans -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 
 <body>
+    <div class="video-background">
+        <video autoplay muted loop>
+            <source src="video_background.mp4" type="video/mp4">
+        </video>
+    </div>
+
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6 col-md-offset-3">
                 <h1>Login</h1>
                 <form onsubmit="login(); return false;">
 
@@ -27,21 +134,26 @@
                             placeholder="Digite sua senha">
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Entrar</button>
-                    <a class="btn btn-default" onclick="window.location.href='cadastro.html'">Não tem uma conta? Cadastre-se aqui</a>
-                    <a href="#" class="btn btn-google" onclick="loginGoogle()">Entrar usando conta Google </a>
-                    <button type="button" id="recover-password" disabled="true" class="btn btn-link">
-                        Recuperar Senha
+                    <button type="submit" class="btn btn-primary">
+                        <i class="material-icons">account_circle</i>Entrar 
+
                     </button>
+                    <p class="btn-link" onclick="window.location.href='cadastro.html'">Não tem uma conta? Cadastre-se
+                        aqui</p>
+                    <p class="btn-link" id="recover-password" disabled="true">
+                        Recuperar Senha
+                    </p>
+                    <button type="button" class="btn btn-google" onclick="loginGoogle()">
+                        <i class="material-icons">account_circle</i> Entrar usando conta Google
+                    </button>
+                    
 
                 </form>
-
             </div>
         </div>
     </div>
 </body>
 
-<link rel="stylesheet" href="login.css"></link>
 <script src="validator.js"></script>
 
 <script type="module">

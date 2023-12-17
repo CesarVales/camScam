@@ -51,8 +51,9 @@
         const searchWidget = new Search({
           view: view
         });
+        
         searchWidget.on("select-result", function(event){
-            console.log("The selected search result: ", event);
+            console.log("The selected search result: ", event.result.name);
             const camera = view.camera.clone();
             localStorage.setItem
         });
