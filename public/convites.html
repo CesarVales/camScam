@@ -14,6 +14,14 @@
     <script type="module" defer src="/__/firebase/10.0.0/firebase-firestore.js"></script>
 
     <style>
+        .btn-primary
+        {
+            color: #673ab7;
+        }
+        .btn-danger
+        {
+            color: #c41532;
+        }
         body {
             background-color: #f5f5f5;
             /* Cor de fundo */
@@ -30,7 +38,7 @@
         }
 
         h2 {
-            color: #e6e0f1;
+            color: #e49c9c;
             /* Cor roxa */
         }
 
@@ -39,6 +47,7 @@
         }
 
         .btn-primary {
+            
             background-color: #673ab7;
             /* Cor de fundo do botão principal */
             border-color: #673ab7;
@@ -66,20 +75,6 @@
             /* Cor da borda do botão de cancelar ao passar o mouse */
         }
 
-        .btn-success {
-            background-color: #5e35b1;
-            /* Cor de fundo do botão de novo evento */
-            border-color: #5e35b1;
-            /* Cor da borda do botão de novo evento */
-        }
-
-        .btn-success:hover {
-            background-color: #7d55cc;
-            /* Cor de fundo do botão de novo evento ao passar o mouse */
-            border-color: #7d55cc;
-            /* Cor da borda do botão de novo evento ao passar o mouse */
-        }
-
         .table {
             background-color: #fff;
             /* Cor de fundo da tabela */
@@ -89,29 +84,12 @@
             /* Adicione uma altura mínima à tabela */
         }
 
-        th,
         td {
             border-color: #ddd;
             /* Cor da borda das células da tabela */
         }
 
-        .card {
-            border-radius: 15px;
-            /* Borda arredondada */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            /* Sombra leve */
-            margin-bottom: 20px;
-            /* Espaçamento inferior */
-        }
-
-        .card-header {
-            background-color: #673ab7;
-            /* Cor de fundo do cabeçalho do card */
-            color: #fff;
-            /* Cor do texto do cabeçalho do card */
-            border-bottom: none;
-            /* Sem borda inferior no cabeçalho do card */
-        }
+       
     </style>
 </head>
 
@@ -190,7 +168,7 @@
         console.log(localStorage.getItem('user'))
         const eventosSnapshot = await getDocs(q);
         listaEventos = eventosSnapshot.docs.map(doc => doc.data());
-
+        
         // Adiciona as linhas à tabela
         if (listaEventos.length === 0) {
             tabelaEventos.innerHTML = '<td colspan="3">Nenhum evento</td>';
@@ -199,7 +177,7 @@
                 var evento = listaEventos[i];
                 var linha = document.createElement('tr');
                 linha.innerHTML = `<td>${new Date(evento.data).toLocaleDateString()}</td><td>${evento.nome}</td>`;
-                console.log(evento.coordenadas)
+                console.log(evento)
 
                 linha.innerHTML += `<td>${evento.local}</td>`;
                 linha.innerHTML += `<td>
@@ -225,7 +203,8 @@
         const rowIndex = target.closest('tr').rowIndex;
 
         // Obtenha os valores associados à linha clicada
-        const eventoClicado = listaEventos[rowIndex ]; // A tabela inclui uma linha de cabeçalho
+        const eventoClicado = listaEventos[rowIndex]; // A tabela inclui uma linha de cabeçalho
+        console.log(eventoClicado);
 
         // Agora você pode usar os valores de 'eventoClicado' conforme necessário
         console.log('Nome do evento clicado:', eventoClicado.nome);

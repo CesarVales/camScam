@@ -32,6 +32,25 @@
         <i class="material-icons mdc-button__icon" aria-hidden="true">group</i>
         <span class="mdc-button__label">Entrar Numa Sala</span>
     </button>
+    <button class="mdc-button mdc-button--raised" id="muteAudioBtn">
+      <i class="material-icons mdc-button__icon" aria-hidden="true">mic_off</i>
+      <span class="mdc-button__label">Mutar </span>
+  </button>
+  
+  <button class="mdc-button mdc-button--raised" id="unmuteAudioBtn">
+      <i class="material-icons mdc-button__icon" aria-hidden="true">mic</i>
+      <span class="mdc-button__label">Desmutar </span>
+  </button>
+  
+  <button class="mdc-button mdc-button--raised" id="muteVideoBtn">
+      <i class="material-icons mdc-button__icon" aria-hidden="true">videocam_off</i>
+      <span class="mdc-button__label">Esconder Vídeo</span>
+  </button>
+  
+  <button class="mdc-button mdc-button--raised" id="unmuteVideoBtn">
+      <i class="material-icons mdc-button__icon" aria-hidden="true">videocam</i>
+      <span class="mdc-button__label">Mostrar Vídeo</span>
+  </button>
     <button class="mdc-button mdc-button--raised" disabled id="hangupBtn">
         <i class="material-icons mdc-button__icon" aria-hidden="true">close</i>
         <span class="mdc-button__label">Sair</span>
@@ -101,8 +120,37 @@ function init() {
   document.querySelector('#hangupBtn').addEventListener('click', hangUp);
   document.querySelector('#createBtn').addEventListener('click', createRoom);
   document.querySelector('#joinBtn').addEventListener('click', joinRoom);
+  
   roomDialog = new mdc.dialog.MDCDialog(document.querySelector('#room-dialog'));
 }
+//funcoes adicionais de mutar e desligar video
+const muteAudioBtn = document.querySelector('#muteAudioBtn');
+const unmuteAudioBtn = document.querySelector('#unmuteAudioBtn');
+const muteVideoBtn = document.querySelector('#muteVideoBtn');
+const unmuteVideoBtn = document.querySelector('#unmuteVideoBtn');
+muteAudioBtn.addEventListener('click', () => {
+    localStream.getAudioTracks().forEach(track => {
+        track.enabled = false;
+    });
+});
+
+unmuteAudioBtn.addEventListener('click', () => {
+    localStream.getAudioTracks().forEach(track => {
+        track.enabled = true;
+    });
+});
+
+muteVideoBtn.addEventListener('click', () => {
+    localStream.getVideoTracks().forEach(track => {
+        track.enabled = false;
+    });
+});
+
+unmuteVideoBtn.addEventListener('click', () => {
+    localStream.getVideoTracks().forEach(track => {
+        track.enabled = true;
+    });
+});
 
 async function createRoom() {
   document.querySelector('#createBtn').disabled = true;
@@ -116,7 +164,6 @@ async function createRoom() {
 const eventosCollection = db.collection('eventos');
 var eventoClicado = JSON.parse(localStorage.getItem('eventoClicado')) 
 
-console.log(eventoClicado)
 // Criar a consulta com cláusulas where
 const q = eventosCollection.where('user', '==', eventoClicado.user)
                            .where('nome', '==', eventoClicado.nome);
@@ -217,6 +264,8 @@ function joinRoom() {
   roomDialog.open();
 }
 
+
+
 async function joinRoomById(roomId) {
   const db = firebase.firestore();
   const roomRef = db.collection('rooms').doc(`${roomId}`);
@@ -279,6 +328,10 @@ async function joinRoomById(roomId) {
 }
 
 async function openUserMedia(e) {
+  var eventoClicado = JSON.parse(localStorage.getItem('eventoClicado')) 
+
+
+
   const stream = await navigator.mediaDevices.getUserMedia(
       {video: true, audio: true});
   document.querySelector('#localVideo').srcObject = stream;
@@ -291,6 +344,11 @@ async function openUserMedia(e) {
   document.querySelector('#joinBtn').disabled = false;
   document.querySelector('#createBtn').disabled = false;
   document.querySelector('#hangupBtn').disabled = false;
+  if(eventoClicado.roomId){
+    
+    console.log(eventoClicado.roomId)
+    await joinRoomById(eventoClicado.roomId);
+  }
 }
 
 async function hangUp(e) {
@@ -351,6 +409,18 @@ function registerPeerConnectionListeners() {
         `ICE connection state change: ${peerConnection.iceConnectionState}`);
   });
 }
+
+function getInviteRoomId(){
+  const eventosCollection = db.collection('eventos');
+var eventoClicado = JSON.parse(localStorage.getItem('eventoClicado')) 
+
+console.log(eventoClicado)
+// Criar a consulta com cláusulas where
+const q = eventosCollection.where('user', '==', eventoClicado.user)
+                           .where('nome', '==', eventoClicado.nome);
+
+}
+
 
 init();
 </script>
